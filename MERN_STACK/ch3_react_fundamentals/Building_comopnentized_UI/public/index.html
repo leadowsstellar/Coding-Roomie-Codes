@@ -1,0 +1,67 @@
+<!-- Write some Code here -->
+<html>
+
+<head>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+</head>
+
+<body>
+    <div id="container"> </div>
+</body>
+<script type="text/babel">
+    function BooksManager() {
+        const [books, setBooks] = React.useState([]);
+        const getBooks = () => {
+            const xhr = new XMLHttpRequest();
+            xhr.open('get', '/get-books', true);
+            xhr.onload = () => {
+                const json = xhr.responseText;
+                const booksData = JSON.parse(json);
+                setBooks(booksData);
+            };
+            xhr.send();
+        }
+        return (<div> <button onClick={getBooks}>Get Books</button>
+            {books.map((book, index) => (
+                <div key={index} style={{ border: "1px solid black", padding: "10px", margin: "10px", display: "inline-block" }}>
+                    <div>{book.name}</div>
+                    <div>{book.author}</div>
+                    <div>{book.price}</div>
+                </div>
+            ))}
+        </div>);
+    }
+
+    function ProductsManager() {
+        const [products, setProducts] = React.useState([]);
+        const getProducts = () => {
+            const xhr = new XMLHttpRequest();
+            xhr.open('get', '/get-products', true);
+            xhr.onload = () => {
+                const json = xhr.responseText;
+                const productsData = JSON.parse(json);
+                setProducts(productsData);
+            };
+            xhr.send();
+        }
+        return (<div> <button onClick={getProducts}>Get Products</button>
+            {products.map((product, index) => (
+                <div key={index} style={{ border: "1px solid black", padding: "10px", margin: "10px", display: "inline-block" }}>
+                    <div>{product.name}</div>
+                    <div>{product.price}</div>
+                    <div>{product.quantity}</div>
+                </div>
+            ))}
+        </div>);
+    }
+
+    function App() {
+        return (<div><BooksManager /><ProductsManager /></div>);
+    }
+
+    ReactDOM.render(<App />, document.getElementById("container"));
+</script>
+
+</html>
