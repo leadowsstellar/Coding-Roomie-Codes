@@ -17,4 +17,4 @@ console.log(`Array.isArray(e): ${Array.isArray(e)}`);
 console.log(`e type check using proto: ${e.__proto__ === Array.prototype}`);
 const f = function () { };
 console.log(`Type of f: ${typeof f}`);
-console.log(`f type check using proto: ${f.__proto__ === Function.prototype}`);
+console.log(`f type check using proto: ${f.__proto__ === Function.prototype}`); 
