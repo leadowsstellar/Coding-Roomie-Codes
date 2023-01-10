@@ -1,7 +1,7 @@
 // Write some Code here
 
 import { useDispatch, useSelector } from 'react-redux';
-import booksSlice from './redux-store/BooksSlice';
+// import booksSlice from './redux-store/BooksSlice';
 import getBooksFromServer from "./redux-store/BooksThunk";
 
 export default function BooksManagerComponent() {

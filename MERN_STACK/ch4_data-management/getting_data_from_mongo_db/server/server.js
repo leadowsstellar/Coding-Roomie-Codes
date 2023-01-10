@@ -5,7 +5,7 @@ const app = express();
 const { MongoClient } = require('mongodb');
 const client = new MongoClient('mongodb://127.0.0.1:27017');
 const database = client.db('tempdb');
-const cors = require("cors");
+const cors = require('cors');
 app.use(cors());
 
 app.use(function (request, response, next) {

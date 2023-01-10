@@ -1,7 +1,6 @@
 // Write some Code here
 
 import { useDispatch, useSelector } from 'react-redux';
-import productsSlice from './redux-store/ProductsSlice';
 import getProductsFromServer from "./redux-store/ProductsThunk";
 
 export default function ProductsManagerComponent() {
