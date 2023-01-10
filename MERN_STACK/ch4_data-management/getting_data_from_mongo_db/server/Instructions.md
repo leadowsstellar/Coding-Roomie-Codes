@@ -17,15 +17,13 @@ show collections;
 db.books.insertOne({ name:"Book-1", author:"Author-1", price:50 });\
 db.books.insertOne({ name:"Book-2", author:"Author-2", price:100 });\
 db.books.insertOne({ name:"Book-2", author:"Author-2", price:80 });\
-db.books.find();\
+db.books.find();
 
-db.createCollection("products");\
+db.createCollection("products");
 
-show collections;\
+show collections;
 
 db.products.insertOne({ name:"Product-1", quantity:10, price:50 });\
 db.products.insertOne({ name:"Product-2", quantity:20, price:100 });\
 db.products.insertOne({ name:"Product-2", quantity:30, price:80 });\
-db.products.find();\
-
-
+db.products.find();
