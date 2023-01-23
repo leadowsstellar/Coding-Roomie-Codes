@@ -10,6 +10,9 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const saltRounds = 10;
 const SECRET_KEY_FOR_JWT = 'jsonPass123'
+const SECRET_KEY = "<YOUR_SECRET_KEY>";
+
+app.use(express.static('public'));
 app.use(cors());
 app.use(express.json());
 
@@ -28,6 +31,20 @@ const verifyJwt = (token) => {
         } else {
             return true;
         }
+    });
+};
+
+const verifyCaptchaAsync = async (token) => {
+    const verificationUrl = "https://www.google.com/recaptcha/api/siteverify?secret=" + SECRET_KEY + "&response=" + token;
+    return new Promise((resolve, reject) => {
+        request(verificationUrl, (error, response, body) => {
+            body = JSON.parse(body);
+            if (body.success !== undefined && body.success) {
+                resolve(true);
+            } else {
+                resolve(false);
+            }
+        });
     });
 };
 
@@ -55,7 +72,7 @@ app.post('/save-books', async (request, response) => {
         return;
     }
     const books = request.body;
-    const collection = database.collection("books");
+    const collection = dataBase.collection("books");
     for (let book of books) {
         switch (book.status) {
             case "new & updated":
@@ -74,9 +91,9 @@ app.post('/save-books', async (request, response) => {
                 await collection.deleteOne({ _id: book._id });
                 break;
         }
+        const updatedBooks = await collection.find().toArray();
+        response.json(updatedBooks);
     }
-    const updatedBooks = await collection.find().toArray();
-    response.json(updatedBooks);
 });
 
 app.post('/register', async (request, response) => {
@@ -94,7 +111,14 @@ app.post('/register', async (request, response) => {
             response.json({ status: "FAILED", error: "Validation error", message: "Password should have at least 6 characters." });
             return;
         }
-        const collection = database.collection("users");
+
+        const isCaptchaVerified = await verifyCaptchaAsync(req.body.token);
+        if (!isCaptchaVerified) {
+            response.json({ status: "FAILED", error: "Validation error", message: "Recaptcha validation failed." });
+            return;
+        }
+
+        const collection = dataBase.collection("users");
         const usernameExist = await collection.findOne({ username });
         if (usernameExist) {
             response.json({ status: "FAILED", error: "Registration error", message: "Username already exist." });
@@ -119,7 +143,7 @@ app.post('/login', async (request, response) => {
             response.json({ status: "FAILED", error: "Validation error", message: "Password should have at least 6 characters." });
             return;
         }
-        const collection = database.collection("users");
+        const collection = dataBase.collection("users");
         const userData = await collection.findOne({ username });
         if (userData === null) {
             response.json({ status: "FAILED", error: "Login error", message: "User does not exist.Please register first." });

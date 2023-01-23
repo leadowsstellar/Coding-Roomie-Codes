@@ -1,7 +1,7 @@
 // Write some Code here
 
 import { createSlice } from "@reduxjs/toolkit";
-import { userLogin, userRegistration } from "./UserThunk";
+import { userLogin, userRegistration } from "./userThunk";
 const userSlice = createSlice({
     name: "userSlice",
     initialState: {
@@ -13,27 +13,25 @@ const userSlice = createSlice({
         isLoggedIn: false,
         isRegistered: false,
         error: null,
+        sitekey: "<YOUR_SITEKEY>",
+        recaptchaToken: null,
     },
     reducers: {
         usernameChange: (state, action) => { state.username = action.payload.username; },
         passwordChange: (state, action) => { state.password = action.payload.password; },
         confirmPasswordChange: (state, action) => { state.confirmPassword = action.payload.confirmPassword; },
-        clearUserData: (state, action) => {
-            state.username = "";
-            state.password = "";
-            state.confirmPassword = "";
-            state.error = null;
-        },
+        clearUserData: (state, action) => { state.username = ""; state.password = ""; state.confirmPassword = ""; state.error = null; },
+        recaptchaTokenChange: (state, action) => { state.recaptchaToken = action.payload.recaptchaToken; },
     },
     extraReducers: (builder) => {
         builder.addCase(userRegistration.pending, (state, action) => {
             state.isLoading = true;
             state.error = null;
-            state.isRegistered = false;
         });
         builder.addCase(userRegistration.fulfilled, (state, action) => {
             state.isLoading = false;
-            state.isRegistered = true;
+            state.password = "";
+            state.confirmPassword = "";
         });
         builder.addCase(userRegistration.rejected, (state, action) => {
             state.isLoading = false;
@@ -56,5 +54,4 @@ const userSlice = createSlice({
         });
     }
 });
-
 export default userSlice;

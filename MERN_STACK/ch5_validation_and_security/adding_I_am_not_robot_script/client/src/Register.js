@@ -1,10 +1,10 @@
 // Write some Code here
 
 import { NavLink } from 'react-router-dom';
-import { userRegistration } from "./redux-store/UserThunk";
+import { userRegistration } from "./redux-store/userThunk";
 import { useDispatch, useSelector } from 'react-redux';
-import userSlice from './redux-store/UserSlice';
-import { useEffect } from 'react';
+import userSlice from './redux-store/userSlice';
+import ReCAPTCHA from 'react-google-recaptcha'
 
 export default function Register() {
     const dispatch = useDispatch();
@@ -13,14 +13,11 @@ export default function Register() {
         const dataToSend = {
             username: userSliceState.username,
             password: userSliceState.password,
-            confirmPassword: userSliceState.confirmPassword
+            confirmPassword: userSliceState.confirmPassword,
+            recaptchaToken: userSliceState.recaptchaToken
         };
         dispatch(userRegistration(dataToSend));
     };
-
-    useEffect(() => {
-        dispatch(userSlice.actions.clearUserData());
-    }, []);
 
     return (
         <div style={{ border: '1px solid black', padding: '10px' }}>
@@ -29,6 +26,11 @@ export default function Register() {
             Password : <input type="text" value={userSliceState.password} onChange={e => dispatch(userSlice.actions.passwordChange({ password: e.target.value }))} />
             <br />
             Confirm Password : <input type="text" value={userSliceState.confirmPassword} onChange={e => dispatch(userSlice.actions.confirmPasswordChange({ confirmPassword: e.target.value }))} />
+            <br />
+            <ReCAPTCHA
+                sitekey={userSliceState.sitekey}
+                onChange={(value) => dispatch(userSlice.actions.recaptchaTokenChange({ recaptchaToken: value }))}
+            />
             <br />
             {userSliceState.isLoading ? <label>Please wait...</label> :
                 <button onClick={handleRegisterClick}>Register</button>}

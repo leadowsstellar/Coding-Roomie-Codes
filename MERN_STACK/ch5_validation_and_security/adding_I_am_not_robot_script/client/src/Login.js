@@ -1,10 +1,10 @@
 // Write some Code here
 
 import { NavLink } from 'react-router-dom';
-import { userLogin } from "./redux-store/UserThunk";
 import { useDispatch, useSelector } from 'react-redux';
-import userSlice from './redux-store/UserSlice';
-import { useEffect } from 'react';
+import { userLogin } from "./redux-store/userThunk";
+import userSlice from './redux-store/userSlice';
+import { React, useEffect } from 'react';
 
 export default function Login() {
     const dispatch = useDispatch();
