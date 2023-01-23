@@ -11,4 +11,5 @@ export const store = configureStore({
         productsSliceState: productsSlice.reducer,
         userSliceState: userSlice.reducer
     },
+    
 });
